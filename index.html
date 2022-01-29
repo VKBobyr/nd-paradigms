@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='utf-8' />
+  <title>Paradigms Assignment 2</title>
+  <style>
+      * {
+          padding: 0;
+          margin: 0;
+      }
+
+
+      .keyboard-letter {
+          background-color: lightgray;
+          min-width: 40px;
+          padding: 5px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          margin: 5px;
+
+          cursor: pointer;
+      }
+
+
+      .game-board-letter {
+          background-color: lightgray;
+          aspect-ratio: 1;
+      }
+
+      #keyboard {
+          margin-bottom: 40px;
+      }
+
+      #game-board {
+          display: grid;
+          grid-template-columns: repeat(5, 55px);
+          grid-column-gap: 15px;
+          grid-row-gap: 15px;
+
+          margin-top: 40px;
+          margin-bottom: 40px;
+      }
+
+      .keyboard-row {
+          display: flex;
+          justify-content: center;
+      }
+
+      #content {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+      }
+  </style>
+</head>
+<body>
+
+<div id='content'>
+  <div id='game-board'></div>
+  <div id='keyboard'></div>
+</div>
+
+<script>
+
+  class GameBoard {
+    guesses = [];
+
+    C_LETTER = 'game-board-letter';
+
+    nRows = 6;
+    nCols = 5;
+    board = document.querySelector('#game-board');
+
+    getLetterId(letter) {
+      return `board-letter-${letter}`;
+    }
+
+    render() {
+      for (let i = 0; i < this.nRows; i++) {
+        for (let j = 0; j < this.nCols; j++) {
+          const letter = document.createElement('div');
+          letter.className = this.C_LETTER;
+          letter.id = this.getLetterId(letter);
+          letter.textContent = '';
+          this.board.appendChild(letter);
+        }
+      }
+    }
+  }
+
+  class Keyboard {
+    static letters = [
+      ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+      ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+      ['Backspace', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Enter'],
+    ];
+
+    sKeyboard = document.querySelector('#keyboard');
+    C_ROW = 'keyboard-row';
+    C_LETTER = 'keyboard-letter';
+
+    getLetterId(letter) {
+      return `keyboard-letter-${letter}`;
+    }
+
+    render() {
+      Keyboard.letters.forEach(letterRow => {
+        const row = document.createElement('div');
+        row.className = this.C_ROW;
+        this.sKeyboard.appendChild(row);
+
+        letterRow.forEach(l => {
+          const letter = document.createElement('div');
+          letter.className = this.C_LETTER;
+          letter.id = this.getLetterId(l);
+          letter.textContent = l.toUpperCase();
+          row.appendChild(letter);
+        });
+      });
+    }
+  }
+
+  new Keyboard().render();
+  new GameBoard().render();
+</script>
+</body>
+</html>
