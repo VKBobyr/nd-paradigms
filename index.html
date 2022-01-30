@@ -89,6 +89,16 @@
     </div>
 
     <script>
+      function hasRepeating(word) {
+        const length = word.length;
+        for (let i = 0; i < length; i++) {
+          if (word.indexOf(word[i]) !== word.lastIndexOf(word[i])) {
+            return true;
+          }
+        }
+        return false;
+      }
+
       class Hook {
         listeners = [];
 
@@ -257,6 +267,7 @@
         inputHook = new Hook('');
         guessHook = new Hook([]);
         isGameOver = new Hook(false);
+        solution = '';
 
         keyboard = new Keyboard({
           inputHook: this.inputHook,
@@ -301,8 +312,10 @@
         }
 
         chooseSolution() {
-          const index = Math.floor(Math.random() * words.length);
-          this.solution = words[index];
+          while (!this.solution || hasRepeating(this.solution)) {
+            const index = Math.floor(Math.random() * words.length);
+            this.solution = words[index];
+          }
           console.log(`Solution: ${this.solution}`);
         }
 
