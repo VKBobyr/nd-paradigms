@@ -4,9 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "pug-watch": "yarn pug -w src -o html -P"
+    "watch": "nodemon src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.3"
   },
   "devDependencies": {
-    "pug": "^3.0.2"
+    "pug": "^3.0.2",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.6.2"
   }
 }

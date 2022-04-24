@@ -1,0 +1,32 @@
+mixin nav-button(name, url, color)
+  .nav-button(class=(selected ? 'selected' : ''),
+    onclick=`location.href='${url}'`
+    style={'background-color': color})
+    = name
+
+#header
+  style.
+    .nav-button {
+        margin: 5px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .nav-container {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .selected {
+        background-color: blueviolet;
+    }
+
+  .nav-container
+    | Study:
+    for language in languages
+      + nav-button(language.name, `/${language.name}`,
+        (selectedLanguage &&  selectedLanguage.name === language.name) ? 'blueviolet' : '#d2abff')
+    + nav-button("Quiz", '/quiz', 'red')
