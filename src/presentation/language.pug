@@ -1,56 +1,65 @@
 mixin question-answer-pair(q, a)
-  h3.question= q
-  h4.answer= a
+		h3.question= q
+		h4.answer= a
 
 doctype html
 
 html
-  head
-    include includes/head-content
+	head
+		include includes/head-content
 
-  style.
-    .answer{
-        font-weight: normal;
-    }
+	style.
+		.answer {
+			font-weight: normal;
+		}
 
-    .row{
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-    }
+		.row {
+			display: flex;
+			align-items: center;
+			margin-top: 10px;
+		}
 
-    img {
-        margin-right: 10px;
-    }
+		img {
+			margin-right: 10px;
+			margin-bottom: 10px;
+		}
 
-    .like-button {
-        display: flex;
-        justify-content: center;
-        margin: 5px;
-        padding: 5px 10px;
-        background-color: palevioletred;
-        border-radius: 5px;
-        color: white;
-        cursor: pointer;
-        max-width: 100px;
-    }
+		.like-button {
+			display: flex;
+			justify-content: center;
+			margin: 5px;
+			padding: 5px 10px;
+			background-color: palevioletred;
+			border-radius: 5px;
+			color: white;
+			cursor: pointer;
+			max-width: 100px;
+		}
 
-  script.
-    async function onLikeClick(selectedLanguage) {
-      const res = await fetch(`${selectedLanguage.name}/likes`, {method: "POST"});
-      const likeButton = document.getElementById('like-button');
-      const body = await res.json();
-      likeButton.textContent = `Likes: ${body.numLikes}`;
-    }
+		h3 {
+			margin: 0 0 10px 0;
+		}
 
-  body
-    include includes/header
-    .row
-      img(src=selectedLanguage.pictureUrl)
-      h1 #{selectedLanguage.name}
+		h4 {
+			margin: 0 0 20px 0;
+		}
 
-    for question in selectedLanguage.generateQuestions(10)
-      + question-answer-pair(question.question, question.answer)
+	script.
+		async function onLikeClick(selectedLanguage) {
+			const res = await fetch(`${selectedLanguage.name}/likes`, { method: "POST" });
+			const likeButton = document.getElementById('like-button');
+			const body = await res.json();
+			likeButton.textContent = `Likes: ${body.numLikes}`;
+		}
 
-    .like-button(id='like-button', onclick=`onLikeClick(${JSON.stringify(selectedLanguage)})`)
-      = `Like: ${selectedLanguage.numLikes}`
+	body
+		include includes/header
+		.row
+			img(src=selectedLanguage.pictureUrl)
+			h1 #{selectedLanguage.name}
+
+		for question in selectedLanguage.generateQuestions(10)
+			+ question-answer-pair(question.question, question.answer)
+
+		.like-button(id='like-button', onclick=`onLikeClick(${JSON.stringify(selectedLanguage)})`)
+			= `Like: ${selectedLanguage.numLikes}`

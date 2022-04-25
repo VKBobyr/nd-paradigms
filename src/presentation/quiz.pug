@@ -1,94 +1,93 @@
 doctype html
 
 html
-  head
-    include includes/head-content
+	head
+		include includes/head-content
 
-  style.
-    .question-container {
-      display: flex;
-      align-items: center;
-    }
+	style.
+		.question-container {
+			display: flex;
+			align-items: center;
+		}
 
-    .feedback-image {
-      width: 30px;
-      height: 30px;
-      margin-right: 5px;
-    }
+		.feedback-image {
+			width: 30px;
+			height: 30px;
+			margin-right: 5px;
+		}
 
-    #score {
-      margin: 20px;
-      font-size: 30pt;
-      color: blue;
-      font-weight: bold;
-    }
+		#score {
+			margin: 20px;
+			font-size: 30pt;
+			color: blue;
+			font-weight: bold;
+		}
 
-  - const questions = quiz.generateQuestions(10)
+	- const questions = quiz.generateQuestions(10)
 
-  script(type="text/javascript").
-    const questions = JSON.parse('!{JSON.stringify(questions)}');
+	script(type="text/javascript").
+		const questions = JSON.parse('!{JSON.stringify(questions)}');
 
-    function setScore(right, total) {
-      const el = document.getElementById('score')
-      el.textContent = `You got ${right} out of ${total} correct!`
-    }
+		function setScore(right, total) {
+			const el = document.getElementById('score')
+			el.textContent = `You got ${right} out of ${total} correct!`
+		}
 
-    function markQuestion(questionId, right) {
-      const questionImgId = questionId + "_image"
-      const img = document.getElementById(questionImgId)
-      img.setAttribute('src',
-        right ? 'https://cdn.iconscout.com/icon/free/png-128/right-true-verify-perfect-trust-64-32776.png'
-          :'https://cdn.iconscout.com/icon/free/png-128/false-delete-remove-cross-wrong-33-28636.png' )
-    }
+		function markQuestion(questionId, right) {
+			const questionImgId = questionId + "_image"
+			const img = document.getElementById(questionImgId)
+			img.setAttribute('src',
+				right ? 'https://cdn.iconscout.com/icon/free/png-128/right-true-verify-perfect-trust-64-32776.png'
+					: 'https://cdn.iconscout.com/icon/free/png-128/false-delete-remove-cross-wrong-33-28636.png')
+		}
 
-    function evaluateQuizResponses(responses) {
-      let right = 0;
-      const total = questions.length;
+		function evaluateQuizResponses(responses) {
+			let right = 0;
+			const total = questions.length;
 
-      questions.forEach((q)=> {
-        const response = responses[q.question]
-        console.log(response, q.answer)
-        if (response !== q.answer) {
-          markQuestion(q.id, false)
-        } else {
-          right++;
-          markQuestion(q.id, true)
-        }
-      })
+			questions.forEach((q) => {
+				const response = responses[q.question]
+				console.log(response, q.answer)
+				if (response !== q.answer) {
+					markQuestion(q.id, false)
+				} else {
+					right++;
+					markQuestion(q.id, true)
+				}
+			})
 
-      setScore(right, total)
-    }
+			setScore(right, total)
+		}
 
-    window.onload = function() {
-      const form = document.querySelector('form')
-      form.addEventListener('submit', (e) => {
-        e.preventDefault()
-        const formData = new FormData(e.target);
-        const formProps = Object.fromEntries(formData);
-        evaluateQuizResponses(formProps)
-      })
-    }
+		window.onload = function() {
+			const form = document.querySelector('form')
+			form.addEventListener('submit', (e) => {
+				e.preventDefault()
+				const formData = new FormData(e.target);
+				const formProps = Object.fromEntries(formData);
+				evaluateQuizResponses(formProps)
+			})
+		}
 
+	body
+		include includes/header
+		h1 Quiz
 
-  body
-    include includes/header
-    h1 Quiz
+		form
+			for question in questions
+				.question-container
+					img(class="feedback-image" id=`${question.id}_image`)
+					p
+						= question.question
 
-    form
-      for question in questions
-        .question-container
-          img(class="feedback-image" id=`${question.id}_image`)
-          p
-            = question.question
+				for answer in question.possibleAnswers
+					input(type="radio" id=`${question.question}_${answer}` name=question.question value=answer)
+					label(for=id)
+						= answer
+					br
 
-        for answer in question.possibleAnswers
-          input(type="radio" id=`${question.question}_${answer}` name=question.question value=answer)
-          label(for=id)
-            = answer
-          br
+				hr.solid
 
-        hr.solid
+			input(type='submit')
 
-      input(type='submit')
-
-      #score
+		#score
