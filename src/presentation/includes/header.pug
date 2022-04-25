@@ -25,6 +25,8 @@ mixin nav-button(name, url, color)
 		}
 
 	.nav-container
+		+ nav-button("Home", '/', 'blue')
+
 		for language in languages
 			+ nav-button(language.name, `/${language.name}`,
 				(selectedLanguage &&	selectedLanguage.name === language.name) ? 'blueviolet' : '#d2abff')
